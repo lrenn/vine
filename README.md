@@ -8,18 +8,23 @@ provide a solution for those of us with a need for Ivy resolution.
 
 ## Features
 
-* :conf - Ivy configurations.  Map to Maven scopes when using maven repositories.
+* :conf - Ivy configurations.  Map to Maven scopes when using maven
+  repositories.
+  
       [foo "1.0.0+" :conf "master"]
       [foo "1.0.0+" :conf "devel->master"] (even if added as a non-dev dependency would be treated as one)
 
 * :transitive true/false - Resolve transitively or not (pull down just that modules artifacts, or that modules artifacts and all of it's dependencies artifacts).
+      
       [foo "1.0.0+" :transitive false]
 
 * latest.integration/latest.release revisions.
+      
       [foo "latest.integration"]
       [bar "latest.release"]
 
 * branches - In addition to revisions, dependencies can also have a branch.  
+      
       [scratch "latest.integration" :branch "foo"]
 
 * force revision - By specifying `:force "true"` in a dependency you can stop conflict managers from evicting old revisions.
