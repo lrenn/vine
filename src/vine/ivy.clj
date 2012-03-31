@@ -14,7 +14,8 @@
            [org.apache.ivy.core.module.descriptor DefaultDependencyDescriptor]
            [org.apache.ivy.plugins.resolver IBiblioResolver]
            [org.apache.ivy.plugins.matcher ExactPatternMatcher PatternMatcher]
-           [org.apache.ivy.util.filter FilterHelper]))
+           [org.apache.ivy.util.filter FilterHelper]
+           [org.apache.ivy.util DefaultMessageLogger]))
 
 (def artifact-pattern "[organisation]/[module]/([branch]/)[revision]/[type]s/[artifact].[ext]")
 
@@ -50,16 +51,24 @@
          (.add chain r)))
      ivy))
 
+(defn- make-ivy
+  []
+  (let [ivy (Ivy/newInstance)]
+    (doto (.getLoggerEngine ivy)
+      (.pushLogger (DefaultMessageLogger. 0))
+      (.setShowProgress false))
+    ivy))
+
 (defn ivy
   "Create a new Ivy instance."
   ([]
-     (let [ivy (Ivy/newInstance)]
+     (let [ivy (make-ivy)]
        (.configureDefault ivy)
        ivy))
   ([settings]
      (if-not settings
        (ivy)
-       (let [ivy (Ivy/newInstance)]
+       (let [ivy (make-ivy)]
          (.configure ivy (.toURL (io/file settings)))
          ivy))))
 

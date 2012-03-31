@@ -27,12 +27,12 @@
   [project]
   `[:dependencies
     ~@(make-dependencies (:dependencies project) "default->default")
-    ~@(make-dependencies (:dev-dependencies project) "devel->default")])
+    ~@(make-dependencies (:plugins project) "plugins->default")])
 
 (def default-confs
   {:confs [{:name "master"}
            {:name "default"}
-           {:name "devel" :visibility "private"}]})
+           {:name "plugins" :visibility "private"}]})
 
 (defn configurations
   [project]
@@ -92,5 +92,5 @@
            (.write ivy-writer ivy))
          (when-not silently? (println "Wrote" (str ivy-file)))
          ivy-file)))
-  ([project ivy-location] (ivy-xml project ivy-location false))
+  ([project ivy-location] (ivy-xml project ivy-location true))
   ([project] (ivy-xml project "ivy.xml")))

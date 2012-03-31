@@ -20,7 +20,7 @@
    [:configurations {}
     [:conf {:name "master"}]
     [:conf {:name "default"}]
-    [:conf {:visibility "private", :name "devel"}]]
+    [:conf {:visibility "private", :name "plugins"}]]
    [:publications {} [:artifact {:name "test", :type "jar", :conf "master,default"}]]
    [:dependencies
     [:dependency {:org "org.clojure", :name "clojure", :rev "1.3.0", :conf "default->default"}]
@@ -45,7 +45,7 @@
     [:description {:homepage "http://github.com/lrenn/vine"} "A test project for vine."]]
    [:configurations {} [:conf {:name "master"}]
     [:conf {:name "default"}]
-    [:conf {:visibility "private", :name "devel"}]]
+    [:conf {:visibility "private", :name "plugins"}]]
    [:publications {} [:artifact {:name "test", :type "jar", :conf "master,default"}]]
    [:dependencies
     [:dependency {:org "org.clojure", :name "clojure", :rev "1.3.0", :conf "default->default"}]
