@@ -15,7 +15,7 @@
            [org.apache.ivy.plugins.resolver IBiblioResolver]
            [org.apache.ivy.plugins.matcher ExactPatternMatcher PatternMatcher]
            [org.apache.ivy.util.filter FilterHelper]
-           [org.apache.ivy.util DefaultMessageLogger]))
+           [org.apache.ivy.util DefaultMessageLogger Message]))
 
 (def artifact-pattern "[organisation]/[module]/([branch]/)[revision]/[type]s/[artifact].[ext]")
 
@@ -51,12 +51,20 @@
          (.add chain r)))
      ivy))
 
+(defn- make-logger
+  [level]
+  (proxy [DefaultMessageLogger] [level]
+    (log [msg l]
+      (if (<= l (.getLevel this))
+        (println msg)))
+    (doProgress [] (print "."))
+    (doEndProgress [msg] (println msg))))
+
 (defn- make-ivy
   []
   (let [ivy (Ivy/newInstance)]
     (doto (.getLoggerEngine ivy)
-      (.pushLogger (DefaultMessageLogger. 0))
-      (.setShowProgress false))
+      (.pushLogger (make-logger Message/MSG_INFO)))
     ivy))
 
 (defn ivy

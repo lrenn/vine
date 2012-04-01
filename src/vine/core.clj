@@ -1,4 +1,5 @@
 (ns vine.core
+  (:require [clojure.java.io :as io])
   (:use [vine.ivy]
         [vine.xml]))
 
@@ -16,6 +17,7 @@
 
 (defn resolve-dependencies-xml
   [project depenencies-key]
-  (let [ivy-xml (ivy-xml project)
-        ivy     (init-ivy project)]
-    (report-files (ivy-resolve-xml ivy ivy-xml))))
+  (binding [*out* (io/writer ".ivy-log")]
+    (let [ivy-xml (ivy-xml project)
+          ivy     (init-ivy project)]
+      (report-files (ivy-resolve-xml ivy ivy-xml)))))

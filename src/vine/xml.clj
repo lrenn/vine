@@ -93,4 +93,4 @@
          (when-not silently? (println "Wrote" (str ivy-file)))
          ivy-file)))
   ([project ivy-location] (ivy-xml project ivy-location true))
-  ([project] (ivy-xml project "ivy.xml")))
+  ([project] (ivy-xml project ".ivy.xml")))
