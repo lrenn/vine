@@ -83,7 +83,7 @@
 (defn ivy-resolve-xml
   [ivy ivy-xml & {:keys [conf types]
                   :or   {conf  "*"
-                         types "jar"}
+                         types "jar,bundle"}
                   :as   opts}]
   (let [engine  (.getResolveEngine ivy)
         options (ResolveOptions.)]
