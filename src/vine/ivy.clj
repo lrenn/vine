@@ -1,7 +1,7 @@
 (ns vine.ivy
   (:require [clojure.java.io :as io]
             [clojure.string :as string])
-  (:use [ordered.map :as ordered])
+  (:use [flatland.ordered.map :as ordered])
   (:import [org.apache.ivy Ivy]
            [org.apache.ivy.core.report ArtifactDownloadReport ResolveReport]
            [org.apache.ivy.core.resolve ResolveOptions]

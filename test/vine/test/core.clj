@@ -2,15 +2,15 @@
   (:use [vine.core])
   (:use [clojure.test]))
 
-(def test-project {:name   "test"
-                   :group   "vine"
-                   :version "1.0.0-SPAPSHOT"
-                   :description "A fast library for rendering HTML in Clojure"
-                   :url "http://github.com/weavejester/hiccup"
-                   :dependencies '[[org.clojure/clojure "1.3.0"]
-                                   [ring/ring-core "1.0.0-RC1"
-                                    :exclusions [commons-codec]]]})
+(def simple-project {:name   "simple"
+                     :group   "vine.test"
+                     :version "1.0.0-SPAPSHOT"
+                     :description "Simple test project."
+                     :url "https://github.com/lrenn/vine"
+                     :dependencies '[[org.clojure/clojure "1.5.1"]
+                                     [ring/ring-core "1.1.8"]]})
 
-(deftest test-resolve-dependencies-xml
-  (let [files  (resolve-dependencies-xml test-project :dependencies)]
-    (is (= 5 (count files)))))
+(deftest test-resolved-files
+  (let [files  (resolved-files simple-project :dependencies)]
+    (is (= 8 (count files)))
+    (is (every? #(.exists %1) files))))

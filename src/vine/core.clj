@@ -5,19 +5,28 @@
 
 (defn report-files
   "Returns a list of Files for a given resolve report."
-  [report]
-  (map #(.getLocalFile %1) (.getAllArtifactsReports report)))
+  [report dependencies-key]
+  (let [conf (if (= :dependencies dependencies-key)
+               "default"
+               (name dependencies-key))
+        artifact-reports (.getAllArtifactsReports
+                          (.getConfigurationReport report conf))]
+    (map #(.getLocalFile %1) artifact-reports)))
 
-(defn init-ivy
+(defn ivy-instance
   "Initializes and returns an Ivy instance given a project map."
   [project]
-  (if (:ivy-settings project)
+  (if-let [settings (:ivy-settings project)] 
     (ivy (:ivy-settings project))
     (add-resolvers (ivy) (make-resolvers project))))
 
-(defn resolve-dependencies-xml
-  [project depenencies-key]
-  (binding [*out* (io/writer ".ivy-log")]
-    (let [ivy-xml (ivy-xml project)
-          ivy     (init-ivy project)]
-      (report-files (ivy-resolve-xml ivy ivy-xml)))))
+(defn ivy-resolve
+  [project]
+  (let [ivy-xml (ivy-xml project)
+        ivy     (ivy-instance project)]
+    (ivy-resolve-xml ivy ivy-xml)))
+
+(defn resolved-files
+  [project dependencies-key]
+  (let [report (ivy-resolve project)]
+    (report-files report dependencies-key)))
