@@ -1,10 +1,8 @@
 # vine
 
-Vine is a library to allow leiningen to resolve dependencies via
-[Apache Ivy](http://ant.apache.org/ivy/). 
-
-The goal is not to replace aether and maven in leiningen, but only to
-provide a solution for those of us with a need for Ivy resolution.
+Vine is a library for resolving dependencies via
+[Apache Ivy](http://ant.apache.org/ivy/) and generating ivy.xml files for clojure project definitions.
+It is used by the lein-ivy leiningen plugin to allow clojure projects to resolve against and publish to Ivy repositories.
 
 ## Features
 
@@ -44,40 +42,15 @@ provide a solution for those of us with a need for Ivy resolution.
 
 ## Usage
 
-Bootstrapping the leiningen ivy branch takes a bit of work.  I'll
-assume you have leiningen 1.7.0 installed already and named lein.
+See [lein-ivy](https://github.com/lrenn/lein-ivy).
+     
+## TODO
 
-     git clone git://github.com/lrenn/vine.git
-
-     cd vine && lein install && cd  ..
-
-     git clone git://github.com/lrenn/leiningen.git
-     
-     cd leiningen
-     
-     git checkout ivy
-     
-     cd leiningen-core && lein install
-     
-     cd ..
-     
-     ln -s bin/lein ~/bin/lein-ivy
-     
-     cd ../some-project
-     
-     lein-ivy deps
-
-     
-## Cake/Ivy
-
-Work had previously been done to
-[port the Cake build system to Ivy](https://github.com/lrenn/cake/wiki/Ivy).
-The current plan is to support resolution via changes to
-leiningen-core, and provide some of the functionality of the cake port
-via a leiningen:ivy plugin.
+Vine and lein-ivy should eventually support all the features of the 
+[Cake Ivy branch](https://github.com/lrenn/cake/wiki/Ivy).  Currently only resolution is supported.
 
 ## License
 
-Copyright (C) 2012 Luke Renn
+Copyright (C) 2012, 2013 Luke Renn
 
 Distributed under the Eclipse Public License, the same as Clojure.
