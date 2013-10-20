@@ -5,7 +5,8 @@
 (defn group
   "Gets the group id out of a dependency or exclude like 'vine.core => vine, 'vine => vine."
   [dep]
-  (or (namespace dep) (name dep)))
+  (let [dep (if (vector? dep) (first dep) dep)]
+    (or (namespace dep) (name dep))))
 
 (defn exclusion
   [dep]
@@ -21,7 +22,7 @@
                 {:conf (or (:conf opts) default-conf)
                  :rev version :name (name dep) :org (group dep)})
         ~@(if-let [exclusions (:exclusions opts)]
-            (vec (map exclusion exclusions)))])))
+            (vec (map exclusion (filter (complement vector?) exclusions))))])))
 
 (defn dependencies
   [project]
