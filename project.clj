@@ -1,4 +1,8 @@
 (defproject vine "0.2.0-SNAPSHOT"
+  :description "Generate and resolve Clojure project.clj files via Apache Ivy."
+  :url "http://github.com/lrenn/vine"
+  :license {:name "Eclipse Public License"
+            :url "http://www.eclipse.org/legal/epl-v10.html"}
   :description "Resolve leiningen projects with Apache Ivy."
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/data.xml "0.0.7"]
