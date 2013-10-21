@@ -1,16 +1,23 @@
 (ns vine.xml
-  (:require [clojure.java.io :as io])
-  (:use [clojure.data.xml :as xml]))
+  (:require [clojure.java.io :as io]
+            [clojure.data.xml :as xml]
+            [clojure.set :refer (rename-keys)]))
 
 (defn group
   "Gets the group id out of a dependency or exclude like 'vine.core => vine, 'vine => vine."
   [dep]
-  (let [dep (if (vector? dep) (first dep) dep)]
-    (or (namespace dep) (name dep))))
+  (or (namespace dep) (name dep)))
+
+(defn exclusion-opts
+  [opts]
+  (-> (apply hash-map opts)
+      (select-keys [:extension :classifier])
+      (rename-keys {:extension :ext :classifier :m:classifier})))
 
 (defn exclusion
-  [dep]
-  [:exclude {:org (group dep) :name (name dep)}])
+  [[dep & opts]]
+  (let [opts (exclusion-opts opts)]
+    [:exclude (merge {:org (group dep) :name (name dep)} opts)]))
 
 (defn make-dependencies
   [deps default-conf]
@@ -22,7 +29,7 @@
                 {:conf (or (:conf opts) default-conf)
                  :rev version :name (name dep) :org (group dep)})
         ~@(if-let [exclusions (:exclusions opts)]
-            (vec (map exclusion (filter (complement vector?) exclusions))))])))
+            (vec (map exclusion exclusions)))])))
 
 (defn dependencies
   [project]
