@@ -68,3 +68,10 @@
          s (xml/indent-str e)]
      (comment (println s))
      (is (= :ivy-module (:tag e)))))
+
+(deftest test-wrap-exclusions
+  (let [did   (wrap-exclusions '([commons-codec]))
+        didnt (wrap-exclusions '[commons-codec])]
+    ;; make sure exclusions that did have a seq wrapped match
+    ;; those that didn't.
+    (is (= did didnt))))

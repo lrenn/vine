@@ -19,6 +19,16 @@
   (let [opts (exclusion-opts opts)]
     [:exclude (merge {:org (group dep) :name (name dep)} opts)]))
 
+(defn wrap-exclusions
+  "Convert a single exclusions [a] into ([a]).  This is done because
+   leiningen allows you to write :exclusions [a] instead of
+   :exclusions [[a]] when you have only one exclusion.
+   We need to allow it as well."
+  [exclusions]
+  (seq (if (vector? (first exclusions))
+         exclusions
+         [exclusions])))
+
 (defn make-dependencies
   [deps default-conf]
   (for [[dep version & opts] deps]
@@ -29,7 +39,7 @@
                 {:conf (or (:conf opts) default-conf)
                  :rev version :name (name dep) :org (group dep)})
         ~@(if-let [exclusions (:exclusions opts)]
-            (vec (map exclusion exclusions)))])))
+            (vec (map exclusion (wrap-exclusions exclusions))))])))
 
 (defn dependencies
   [project]
@@ -91,14 +101,14 @@
   (xml/indent-str (ivy-element project)))
 
 (defn ivy-xml
-  "Write a ivy.xml file to disk for Ivy interoperability."
+  "Create an ivy.xml file and write it to disk."
   ([project ivy-location silently?]
      (when-let [ivy (make-ivy-xml project)]
        (let [ivy-file (io/file "." ivy-location)]
          (.mkdirs (.getParentFile ivy-file))
          (with-open [ivy-writer (io/writer ivy-file)]
            (.write ivy-writer ivy))
-         (when-not silently? (println "Wrote" (str ivy-file)))
+         (when-not silently? (println "Wrote " (str ivy-file)))
          ivy-file)))
   ([project ivy-location] (ivy-xml project ivy-location true))
   ([project] (ivy-xml project ".ivy.xml")))
