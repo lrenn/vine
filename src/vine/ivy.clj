@@ -1,7 +1,8 @@
 (ns vine.ivy
   (:require [clojure.java.io :as io]
-            [clojure.string :as string])
-  (:use [flatland.ordered.map :as ordered])
+            [clojure.string :as string]
+            [flatland.ordered.map :as ordered])
+  (:refer-clojure :exclude [deliver resolve])
   (:import [org.apache.ivy Ivy]
            [org.apache.ivy.core.report ArtifactDownloadReport ResolveReport]
            [org.apache.ivy.core.resolve ResolveOptions]
@@ -16,8 +17,6 @@
            [org.apache.ivy.plugins.matcher ExactPatternMatcher PatternMatcher]
            [org.apache.ivy.util.filter FilterHelper]
            [org.apache.ivy.util DefaultMessageLogger Message]))
-
-(def artifact-pattern "[organisation]/[module]/([branch]/)[revision]/[type]s/[artifact].[ext]")
 
 (def default-repos (ordered/ordered-map
                     "central" {:url "http://repo1.maven.org/maven2"}
@@ -80,7 +79,7 @@
          (.configure ivy (.toURL (io/file settings)))
          ivy))))
 
-(defn ivy-resolve-xml
+(defn resolve
   [ivy ivy-xml & {:keys [conf types]
                   :or   {conf  "*"
                          types "jar,bundle"}
@@ -90,3 +89,28 @@
     (.setConfs options (into-array (string/split conf #",")))
     (.setArtifactFilter options (FilterHelper/getArtifactTypeFilter types))
     (.resolve ivy (.toURL ivy-xml) options)))
+
+(defn- deliver
+  [ivy report]
+  (let [md (.getModuleDescriptor report)
+        revision (.getRevision md)]
+    (.deliver ivy
+              (.getResolvedModuleRevisionId md)
+              revision
+              ".ivy-[revision].xml")))
+
+(defn publish
+  [ivy report & {:keys [source-patterns
+                        to-resolver
+                        overwrite]
+                 :or {source-patterns ["target/[artifact]-[revision].[ext]"]
+                      to-resolver "local"
+                      overwrite false}
+                 :as opts}]
+  (deliver ivy report)
+  (let [md (.getModuleDescriptor report)
+        mrid (.getModuleRevisionId md)
+        options (doto (PublishOptions.)
+                  (.setSrcIvyPattern ".ivy-[revision].xml")
+                  (.setOverwrite overwrite))]
+    (.publish ivy mrid source-patterns to-resolver options)))

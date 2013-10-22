@@ -1,3 +1,4 @@
 (ns vine.test.ivy
-  (:use [vine.ivy]
-        [clojure.test]))
+  (:require [vine.ivy :refer :all]
+            [clojure.test :refer :all])
+  (:refer-clojure :exclude [deliver resolve]))
