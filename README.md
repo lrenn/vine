@@ -12,8 +12,8 @@ It is used by the lein-ivy leiningen plugin to allow clojure projects to resolve
 ```clojure
       [foo "1.0.0+" :conf "master"]
       [bar "1.0.0+" :conf "jetty"]
-```      
-      
+```
+
 
 * :transitive true/false - Resolve transitively or not (pull down just that modules artifacts, or that modules artifacts and all of it's dependencies artifacts).
 
@@ -23,14 +23,14 @@ It is used by the lein-ivy leiningen plugin to allow clojure projects to resolve
 
 * latest.integration/latest.release revisions.
 
-```clojure      
+```clojure
       [foo "latest.integration"]
       [bar "latest.release"]
 ```
 
-* branches - In addition to revisions, dependencies can also have a branch.  
+* branches - In addition to revisions, dependencies can also have a branch.
 
-```clojure      
+```clojure
       [scratch "latest.integration" :branch "foo"]
 ```
 
@@ -38,15 +38,15 @@ It is used by the lein-ivy leiningen plugin to allow clojure projects to resolve
 
 * changing modules - By specifying `:changing "true"` you can have ivy ignore the cache for this particular dependency.
 
-* `:ivysettings "path/to/ivysettings.xml"` - You can specify your own [ivysettings file](http://ant.apache.org/ivy/history/latest-milestone/settings.html).  Note that the default clojure and clojars repositories are not automatically added when supplying a custom ivysettings file.  In addition, any :repositories in project.clj will be added to an ivy chain named "default".
+* `:ivy-settings "path/to/ivysettings.xml"` - You can specify your own [ivysettings file](http://ant.apache.org/ivy/history/latest-milestone/settings.html).  Note that the default clojure and clojars repositories are not automatically added when supplying a custom ivysettings file.  In addition, any :repositories in project.clj will be added to an ivy chain named "default".
 
 ## Usage
 
 See [lein-ivy](https://github.com/lrenn/lein-ivy).
-     
+
 ## TODO
 
-Vine and lein-ivy should eventually support all the features of the 
+Vine and lein-ivy should eventually support all the features of the
 [Cake Ivy branch](https://github.com/lrenn/cake/wiki/Ivy).  Currently only resolution is supported.
 
 ## License
